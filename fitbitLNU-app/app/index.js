@@ -6,6 +6,7 @@ import * as document from "document";
 import { Accelerometer } from "accelerometer";
 import { outbox } from "file-transfer";
 import { me as device } from "device";
+import { display } from "display";
 
 // Set clock granularity to "seconds" for ticking every second
 clock.granularity = "seconds";
@@ -23,6 +24,7 @@ const filename = "data.txt";
 
 // Function to collect, write, and send data when the file size limit is reached
 function collectWriteAndSendData() {
+  display.poke();
   // Collect accelerometer data
   if (Accelerometer) {
     const accel = new Accelerometer({ frequency: 1 });
@@ -50,7 +52,6 @@ function collectWriteAndSendData() {
   // Actually write the data
   fs.writeFileSync(filename, data, "utf-8");
 
-
   // Check file size and initiate file transfer if the limit is reached
   if (data.length >= fileSizeLimit) {
     sendData();
@@ -68,6 +69,8 @@ function sendData() {
     });
   data = "";
 }
+
+// fs.writeFileSync(filename, "", "utf-8");
 
 // Append previous collected data
 console.log("If there is a file, load data");
